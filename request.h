@@ -7,3 +7,4 @@
 #define PORT 80
 
 void getRequest(int sockfd, const char* domain_name, const char* request, char* buffer);
+void parseTag(char* buffer, char* tag);

@@ -58,3 +58,24 @@ void getRequest(int sockfd, const char* domain_name, const char* request, char* 
 
     return;
 }
+
+// TODO: Maybe make it return string of innerXML from given tag and buffer
+void parseTag(char* buffer, char* tag) {
+    char* start;
+    char* end;
+    
+    // Extract Latitude
+    start = strstr(buffer, "<Latitude>") + strlen("<Latitude>");
+    end = strstr(buffer, "</Latitude>");
+    *end = '\0';
+    printf("%s", start);
+/*
+    // Extract Longitude
+    start = strstr(buffer, "<Longitude>") + strlen("<Longitude>");
+    end = strstr(start, "</Longitude>");
+    *end = '\0';
+    sprintf(output + strlen(output), "%s", start); // Append longitude
+*/
+    return;
+}
+
