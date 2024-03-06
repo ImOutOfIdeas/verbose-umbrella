@@ -1,10 +1,22 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <netdb.h>
+#include "request.h"
 
-#define PORT 80
+int main( void ) {
+    int sockfd;
+    char* domain_name = "dev.virtualearth.net";
+    char* api = "/REST/v1/Locations?q=43302&output=xml&key=AjREHFypWifBoNqhz-uuZ6TZIezmGZlsgVLeVuL0TA1ShjFh72YmO-ruN0c2eOyN";
+    char request[1024];
+    char buffer[4096];
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    sprintf(request, "GET %s HTTP/1.1\r\n", api);
+    strcat(request, "Host: dev.virtualearth.net\r\n");
+    strcat(request, "Connection: close\r\n\r\n");
+
+    getRequest(sockfd, domain_name, request, buffer);
+
+    printf("%s", buffer);
+}
 
 void getRequest(int sockfd, const char* domain_name, const char* request, char* buffer) {
     struct hostent *host;
@@ -35,7 +47,6 @@ void getRequest(int sockfd, const char* domain_name, const char* request, char* 
         char line[100];
 
         bytes_received = recv(sockfd, line, sizeof(line) - 1, 0);
-
         strcat(buffer, line);
     }
     if (-1 == bytes_received) {
@@ -46,22 +57,4 @@ void getRequest(int sockfd, const char* domain_name, const char* request, char* 
     close(sockfd);
 
     return;
-}
-
-int main( void ) {
-    int sockfd;
-    char* domain_name = "dev.virtualearth.net";
-    char* api = "/REST/v1/Locations?q=43302&output=xml&key=AjREHFypWifBoNqhz-uuZ6TZIezmGZlsgVLeVuL0TA1ShjFh72YmO-ruN0c2eOyN";
-    char request[1024];
-    char buffer[4096];
-
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-
-    sprintf(request, "GET %s HTTP/1.1\r\n", api);
-    strcat(request, "Host: dev.virtualearth.net\r\n");
-    strcat(request, "Connection: close\r\n\r\n");
-
-    getRequest(sockfd, domain_name, request, buffer);
-
-    printf("%s", buffer);
 }
