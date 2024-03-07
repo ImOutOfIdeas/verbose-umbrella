@@ -33,6 +33,7 @@ int main(int argc, char** argv) {
     char request[1024];
     char buffer[4096];
     char endpoint[256];
+    char coords[128];
     char* domain_name = COORDINATES_DOMAIN;
 
     sprintf(endpoint, "/REST/v1/Locations?q=%s&output=xml&key=%s", argv[1], COORDINATES_API_KEY);
@@ -46,10 +47,10 @@ int main(int argc, char** argv) {
     formatRequest(request, domain_name, endpoint);
     getRequest(sockfd, domain_name, request, buffer);
 
-    char* lat = parseTag(buffer, "<Latitude>");
-    char* lon = parseTag(buffer, "<Longitude>");
+    sprintf(coords, "%s%%2C", parseTag(buffer, "<Latitude>"));
+    strcat(coords, parseTag(buffer, "<Longitude>")); 
 
-    printf("%s,%s\n", lat, lon);
+    printf("%s", coords); 
 
     return 0;
 }

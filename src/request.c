@@ -12,7 +12,7 @@ void getRequest(int sockfd, const char* domain_name, const char* request, char* 
 
     host = gethostbyname(domain_name); // Obsolete (but I don't care)
     if (host == NULL) {
-        herror("gethostbyname");
+        perror("gethostbyname");
         exit(1);
     }
 
@@ -49,7 +49,7 @@ char* parseTag(char* buffer, char* tag) {
     char* end;
 
     start = strstr(buffer, tag);
-    if (!start) {
+    if (NULL == start) {
         printf("The tag, %s, was not found", tag);
         return "\0";
     } 
